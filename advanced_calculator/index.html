@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AeroCalc - Advanced Glassmorphic Calculator</title>
+  <meta name="description" content="A professional, advanced scientific calculator with interactive glassmorphism design, real-time expression rendering, keyboard support, history panel, and light/dark modes.">
+  <link rel="stylesheet" href="style.css">
+  <!-- Google Fonts: Outfit -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Background elements for Glassmorphic glow -->
+    <div class="bg-glow bg-glow-1"></div>
+    <div class="bg-glow bg-glow-2"></div>
+
+    <div class="calculator-wrapper">
+      
+      <!-- History Panel (Drawer) -->
+      <aside class="history-panel" id="historyPanel">
+        <div class="history-header">
+          <h3>History</h3>
+          <button class="icon-btn btn-close-history" id="closeHistoryBtn" aria-label="Close history">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+          </button>
+        </div>
+        <div class="history-list" id="historyList">
+          <div class="history-empty">No calculations yet</div>
+        </div>
+        <div class="history-footer">
+          <button class="text-btn" id="clearHistoryBtn">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+            Clear History
+          </button>
+        </div>
+      </aside>
+
+      <!-- Main Calculator Card -->
+      <main class="calculator-card">
+        
+        <!-- Calculator Top Control Bar -->
+        <header class="calculator-header">
+          <div class="header-left">
+            <button class="toggle-mode-btn" id="radDegBtn" title="Toggle Degrees/Radians">
+              <span class="active-mode" id="currentAngleMode">DEG</span>
+            </button>
+            <button class="icon-btn" id="toggleHistoryBtn" title="Toggle History" aria-label="Toggle history">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+            </button>
+          </div>
+          
+          <h1 class="brand-title">AeroCalc</h1>
+
+          <div class="header-right">
+            <button class="icon-btn" id="themeToggleBtn" title="Toggle Theme" aria-label="Toggle dark/light mode">
+              <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+              <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+            </button>
+          </div>
+        </header>
+
+        <!-- Calculator Screen -->
+        <section class="calculator-screen">
+          <div class="expression-container">
+            <span class="expression-text" id="expressionText"></span>
+            <span class="cursor" id="expressionCursor"></span>
+          </div>
+          <div class="result-container">
+            <span class="preview-equals" id="previewEquals">=</span>
+            <span class="result-text" id="resultText">0</span>
+          </div>
+        </section>
+
+        <!-- Keyboard Guide Tooltip (Triggered by shortcut) -->
+        <div class="keyboard-guide" id="keyboardGuide">
+          <div class="guide-header">
+            <h4>Keyboard Shortcuts</h4>
+            <button class="guide-close" id="closeGuideBtn">&times;</button>
+          </div>
+          <div class="guide-grid">
+            <div><kbd>0</kbd> - <kbd>9</kbd> : Numbers</div>
+            <div><kbd>+</kbd> <kbd>-</kbd> <kbd>*</kbd> <kbd>/</kbd> : Operators</div>
+            <div><kbd>Enter</kbd> or <kbd>=</kbd> : Calculate</div>
+            <div><kbd>Backspace</kbd> : Delete</div>
+            <div><kbd>Esc</kbd> : Clear (AC)</div>
+            <div><kbd>(</kbd> <kbd>)</kbd> : Parentheses</div>
+            <div><kbd>s</kbd> <kbd>c</kbd> <kbd>t</kbd> : Sin, Cos, Tan</div>
+            <div><kbd>r</kbd> : Square Root (√)</div>
+            <div><kbd>^</kbd> : Exponent Power</div>
+            <div><kbd>p</kbd> : Pi (π)</div>
+          </div>
+        </div>
+
+        <!-- Calculator Keypad Layout -->
+        <section class="calculator-keypad">
+          <!-- Scientific Row 1 -->
+          <button class="key key-sci" data-action="sin">sin</button>
+          <button class="key key-sci" data-action="cos">cos</button>
+          <button class="key key-sci" data-action="tan">tan</button>
+          <button class="key key-sci" data-action="pow">x<sup>y</sup></button>
+          <button class="key key-sci" data-action="sqrt">√</button>
+
+          <!-- Scientific Row 2 -->
+          <button class="key key-sci" data-action="log">log</button>
+          <button class="key key-sci" data-action="ln">ln</button>
+          <button class="key key-sci" data-action="sqr">x²</button>
+          <button class="key key-sci" data-value="π">π</button>
+          <button class="key key-sci" data-value="e">e</button>
+
+          <!-- Standard Keys (Grid 4x5 mixed with sci operations) -->
+          <button class="key key-action" data-action="clear">AC</button>
+          <button class="key key-action" data-action="backspace" aria-label="Delete">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 4H8l-7 8 7 8h13a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2z"></path><line x1="18" y1="9" x2="12" y2="15"></line><line x1="12" y1="9" x2="18" y2="15"></line></svg>
+          </button>
+          <button class="key key-op" data-value="(">(</button>
+          <button class="key key-op" data-value=")">)</button>
+          <button class="key key-op" data-value="÷">÷</button>
+
+          <button class="key key-num" data-value="7">7</button>
+          <button class="key key-num" data-value="8">8</button>
+          <button class="key key-num" data-value="9">9</button>
+          <button class="key key-op" data-value="%">%</button>
+          <button class="key key-op" data-value="×">×</button>
+
+          <button class="key key-num" data-value="4">4</button>
+          <button class="key key-num" data-value="5">5</button>
+          <button class="key key-num" data-value="6">6</button>
+          <button class="key key-op" data-value="-">−</button>
+          <button class="key key-sci-inline key-sci" data-action="keyboard" title="Keyboard Guide">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2" ry="2"></rect><line x1="6" y1="8" x2="6" y2="8"></line><line x1="10" y1="8" x2="10" y2="8"></line><line x1="14" y1="8" x2="14" y2="8"></line><line x1="18" y1="8" x2="18" y2="8"></line><line x1="6" y1="12" x2="6" y2="12"></line><line x1="18" y1="12" x2="18" y2="12"></line><line x1="7" y1="16" x2="17" y2="16"></line><line x1="10" y1="12" x2="14" y2="12"></line></svg>
+          </button>
+
+          <button class="key key-num" data-value="1">1</button>
+          <button class="key key-num" data-value="2">2</button>
+          <button class="key key-num" data-value="3">3</button>
+          <button class="key key-op" data-value="+">+</button>
+          <!-- Equal button (Spans two rows or stands tall) -->
+          <button class="key key-equal" data-action="calculate">=</button>
+
+          <button class="key key-num key-zero" data-value="0">0</button>
+          <button class="key key-num" data-value=".">.</button>
+        </section>
+      </main>
+    </div>
+  </div>
+  
+  <script src="script.js"></script>
+</body>
+</html>

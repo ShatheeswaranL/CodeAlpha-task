@@ -1,0 +1,751 @@
+:root {
+  --bg-app: #090d16;
+  --bg-gradient: radial-gradient(circle at 50% 50%, #151030 0%, #070710 100%);
+  --calc-bg: rgba(15, 18, 36, 0.45);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --glass-border-light: rgba(255, 255, 255, 0.04);
+  --glass-glow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --text-dim: #64748b;
+  
+  --key-bg-num: rgba(255, 255, 255, 0.05);
+  --key-text-num: #e2e8f0;
+  
+  --key-bg-sci: rgba(99, 102, 241, 0.12); /* indigo tint */
+  --key-text-sci: #818cf8;
+  
+  --key-bg-op: rgba(249, 115, 22, 0.12); /* orange tint */
+  --key-text-op: #fb923c;
+  
+  --key-bg-action: rgba(239, 68, 68, 0.12); /* red tint */
+  --key-text-action: #f87171;
+  
+  --key-bg-equal: linear-gradient(135deg, #6366f1, #a855f7);
+  --key-text-equal: #ffffff;
+  --key-shadow-equal: 0 4px 15px rgba(99, 102, 241, 0.4);
+  
+  --active-indicator: #10b981; /* green */
+  --active-indicator-bg: rgba(16, 185, 129, 0.15);
+  
+  --history-bg: rgba(10, 12, 26, 0.85);
+  
+  --glow-1-color: rgba(99, 102, 241, 0.15);
+  --glow-2-color: rgba(168, 85, 247, 0.12);
+}
+
+[data-theme="light"] {
+  /* Light Theme Variables */
+  --bg-app: #f1f5f9;
+  --bg-gradient: radial-gradient(circle at 50% 50%, #eef2f6 0%, #cbd5e1 100%);
+  --calc-bg: rgba(255, 255, 255, 0.45);
+  --glass-border: rgba(255, 255, 255, 0.6);
+  --glass-border-light: rgba(255, 255, 255, 0.3);
+  --glass-glow: 0 8px 32px 0 rgba(31, 38, 135, 0.08);
+  
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-dim: #94a3b8;
+  
+  --key-bg-num: rgba(255, 255, 255, 0.7);
+  --key-text-num: #334155;
+  
+  --key-bg-sci: rgba(99, 102, 241, 0.15);
+  --key-text-sci: #4f46e5;
+  
+  --key-bg-op: rgba(249, 115, 22, 0.15);
+  --key-text-op: #ea580c;
+  
+  --key-bg-action: rgba(220, 38, 38, 0.12);
+  --key-text-action: #dc2626;
+  
+  --key-bg-equal: linear-gradient(135deg, #4f46e5, #9333ea);
+  --key-text-equal: #ffffff;
+  --key-shadow-equal: 0 4px 15px rgba(79, 70, 229, 0.3);
+  
+  --active-indicator: #059669;
+  --active-indicator-bg: rgba(5, 150, 105, 0.15);
+  
+  --history-bg: rgba(255, 255, 255, 0.95);
+  
+  --glow-1-color: rgba(99, 102, 241, 0.08);
+  --glow-2-color: rgba(168, 85, 247, 0.06);
+}
+
+/* Base Styles */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Outfit', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  background: var(--bg-app);
+  background-image: var(--bg-gradient);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  color: var(--text-primary);
+  position: relative;
+  transition: background 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Glow Background Effects */
+.bg-glow {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  z-index: 0;
+  pointer-events: none;
+  transition: background-color 0.5s ease;
+}
+
+.bg-glow-1 {
+  width: 400px;
+  height: 400px;
+  background-color: var(--glow-1-color);
+  top: 15%;
+  left: 20%;
+  transform: translate(-50%, -50%);
+}
+
+.bg-glow-2 {
+  width: 500px;
+  height: 500px;
+  background-color: var(--glow-2-color);
+  bottom: 10%;
+  right: 15%;
+  transform: translate(50%, 50%);
+}
+
+/* Layout Wrapper */
+.app-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100vh;
+  padding: 20px;
+  z-index: 1;
+}
+
+.calculator-wrapper {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  max-width: 440px; /* Standard calculator width */
+  height: 100%;
+  max-height: 780px;
+  border-radius: 28px;
+  overflow: hidden;
+  box-shadow: var(--glass-glow);
+  border: 1px solid var(--glass-border);
+  background: var(--calc-bg);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  transition: all 0.4s ease;
+}
+
+/* Make space for the history panel when open on larger screens */
+@media (min-width: 800px) {
+  .calculator-wrapper {
+    max-width: 780px; /* Expands to show side-by-side history */
+  }
+}
+
+/* Main Calculator Card */
+.calculator-card {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 24px;
+  position: relative;
+  z-index: 2;
+  transition: padding 0.3s ease;
+}
+
+/* Header Elements */
+.calculator-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.header-left, .header-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.brand-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  background: linear-gradient(135deg, #a855f7, #6366f1);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.toggle-mode-btn {
+  background: var(--active-indicator-bg);
+  border: 1px solid rgba(16, 185, 129, 0.2);
+  color: var(--active-indicator);
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  cursor: pointer;
+  letter-spacing: 0.05em;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.toggle-mode-btn:hover {
+  filter: brightness(1.1);
+  transform: translateY(-1px);
+}
+
+.icon-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--glass-border-light);
+  color: var(--text-secondary);
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.icon-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: var(--text-primary);
+  transform: translateY(-2px);
+}
+
+.icon-btn:active {
+  transform: translateY(0);
+}
+
+/* Theme Toggle Details */
+.sun-icon {
+  display: none;
+}
+.moon-icon {
+  display: block;
+}
+
+[data-theme="light"] .sun-icon {
+  display: block;
+}
+[data-theme="light"] .moon-icon {
+  display: none;
+}
+
+[data-theme="light"] .icon-btn {
+  background: rgba(0, 0, 0, 0.04);
+}
+[data-theme="light"] .icon-btn:hover {
+  background: rgba(0, 0, 0, 0.08);
+}
+
+/* Calculator Screen Display */
+.calculator-screen {
+  flex: 0 0 auto;
+  min-height: 140px;
+  margin-bottom: 24px;
+  padding: 16px;
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: 20px;
+  border: 1px solid var(--glass-border-light);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: flex-end;
+  word-wrap: break-word;
+  word-break: break-all;
+  text-align: right;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+[data-theme="light"] .calculator-screen {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.expression-container {
+  width: 100%;
+  min-height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin-bottom: 8px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  white-space: nowrap;
+  scrollbar-width: none; /* Hide scrollbar Firefox */
+}
+
+.expression-container::-webkit-scrollbar {
+  display: none; /* Hide scrollbar Webkit */
+}
+
+.expression-text {
+  font-size: 1.35rem;
+  color: var(--text-secondary);
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  transition: font-size 0.2s ease;
+}
+
+/* Cursor Indicator */
+.cursor {
+  display: inline-block;
+  width: 2px;
+  height: 22px;
+  background-color: var(--key-text-sci);
+  margin-left: 2px;
+  animation: blink 1s infinite alternate;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 0; }
+  50% { opacity: 1; }
+}
+
+.result-container {
+  width: 100%;
+  display: flex;
+  align-items: baseline;
+  justify-content: flex-end;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.result-container::-webkit-scrollbar {
+  display: none;
+}
+
+.preview-equals {
+  font-size: 1.5rem;
+  color: var(--text-dim);
+  margin-right: 8px;
+  display: none;
+}
+
+.preview-equals.show {
+  display: inline;
+}
+
+.result-text {
+  font-size: 2.8rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  line-height: 1.1;
+  transition: font-size 0.15s ease;
+}
+
+/* Keyboard Guide Popover */
+.keyboard-guide {
+  position: absolute;
+  top: 80px;
+  left: 24px;
+  right: 24px;
+  background: var(--history-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 20px;
+  padding: 16px;
+  z-index: 10;
+  display: none;
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+}
+
+.keyboard-guide.open {
+  display: block;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.guide-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  border-bottom: 1px solid var(--glass-border-light);
+  padding-bottom: 8px;
+}
+
+.guide-header h4 {
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--text-primary);
+}
+
+.guide-close {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 1.4rem;
+  cursor: pointer;
+}
+
+.guide-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px 12px;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+.guide-grid kbd {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 4px;
+  padding: 2px 6px;
+  font-size: 0.75rem;
+  font-family: monospace;
+  color: var(--text-primary);
+}
+
+/* Keypad Grid Layout */
+.calculator-keypad {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 10px;
+  flex: 1 1 auto;
+}
+
+/* Key Styles */
+.key {
+  position: relative;
+  border: none;
+  outline: none;
+  border-radius: 16px;
+  font-size: 1.15rem;
+  font-weight: 500;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+  background: var(--key-bg-num);
+  color: var(--key-text-num);
+  border: 1px solid var(--glass-border-light);
+  aspect-ratio: 1 / 1; /* Keep buttons square */
+  min-height: 48px;
+}
+
+/* Key styling overrides */
+.key-sci {
+  background: var(--key-bg-sci);
+  color: var(--key-text-sci);
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.key-op {
+  background: var(--key-bg-op);
+  color: var(--key-text-op);
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+
+.key-action {
+  background: var(--key-bg-action);
+  color: var(--key-text-action);
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+
+.key-equal {
+  background: var(--key-bg-equal);
+  color: var(--key-text-equal);
+  box-shadow: var(--key-shadow-equal);
+  font-size: 1.5rem;
+  font-weight: 600;
+  grid-row: span 2; /* Span two rows vertically */
+  aspect-ratio: auto; /* Allow height extension */
+  height: 100%;
+}
+
+.key-zero {
+  grid-column: span 2; /* Span 0 key horizontally */
+  aspect-ratio: auto;
+  width: 100%;
+}
+
+.key-sci-inline {
+  grid-column: 5;
+}
+
+/* Button Animations and Hover/Active States */
+.key::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+[data-theme="light"] .key::before {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.key:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.15);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+[data-theme="light"] .key:hover {
+  filter: brightness(0.95);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.key:active, .key.keyboard-active {
+  transform: translateY(1px) scale(0.96);
+  filter: brightness(0.9) !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+}
+
+.key-equal:hover {
+  box-shadow: 0 6px 20px rgba(99, 102, 241, 0.55);
+}
+
+.key-equal:active {
+  box-shadow: 0 2px 8px rgba(99, 102, 241, 0.4) !important;
+}
+
+/* History Panel Styles */
+.history-panel {
+  position: absolute;
+  top: 0;
+  right: 100%; /* Initially hidden off-screen left */
+  width: 100%;
+  height: 100%;
+  background: var(--history-bg);
+  backdrop-filter: blur(25px);
+  -webkit-backdrop-filter: blur(25px);
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  border-right: 1px solid var(--glass-border);
+  transform: translateX(0); /* Controlled via toggling class */
+}
+
+/* Open states */
+.calculator-wrapper.history-open .history-panel {
+  transform: translateX(100%);
+}
+
+@media (min-width: 800px) {
+  .history-panel {
+    position: relative;
+    right: 0;
+    width: 340px;
+    height: 100%;
+    transform: none !important; /* Always visible side-by-side */
+    border-right: none;
+    border-left: 1px solid var(--glass-border);
+    order: 2; /* History on the right side */
+    display: flex;
+  }
+  
+  .btn-close-history {
+    display: none !important; /* Hide close button on wide screens */
+  }
+}
+
+.history-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px 20px 16px;
+  border-bottom: 1px solid var(--glass-border-light);
+}
+
+.history-header h3 {
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.history-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--glass-border-light) transparent;
+}
+
+.history-list::-webkit-scrollbar {
+  width: 4px;
+}
+
+.history-list::-webkit-scrollbar-thumb {
+  background: var(--glass-border-light);
+  border-radius: 4px;
+}
+
+.history-empty {
+  text-align: center;
+  color: var(--text-dim);
+  font-size: 0.9rem;
+  margin-top: 40px;
+}
+
+/* History Card */
+.history-item {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--glass-border-light);
+  border-radius: 12px;
+  padding: 12px;
+  cursor: pointer;
+  text-align: right;
+  transition: all 0.2s ease;
+}
+
+[data-theme="light"] .history-item {
+  background: rgba(0, 0, 0, 0.02);
+}
+
+.history-item:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(99, 102, 241, 0.3);
+  transform: translateY(-1px);
+}
+
+[data-theme="light"] .history-item:hover {
+  background: rgba(0, 0, 0, 0.04);
+}
+
+.history-item-exp {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin-bottom: 4px;
+  overflow-x: auto;
+  white-space: nowrap;
+  scrollbar-width: none;
+}
+.history-item-exp::-webkit-scrollbar {
+  display: none;
+}
+
+.history-item-res {
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.history-footer {
+  padding: 16px 20px 24px;
+  border-top: 1px solid var(--glass-border-light);
+  display: flex;
+  justify-content: center;
+}
+
+.text-btn {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  padding: 8px 16px;
+  border-radius: 12px;
+  transition: all 0.2s ease;
+}
+
+.text-btn:hover {
+  color: var(--key-text-action);
+  background: var(--key-bg-action);
+}
+
+/* Mobile Responsiveness Improvements */
+@media (max-width: 440px) {
+  body {
+    padding: 0;
+  }
+  
+  .app-container {
+    padding: 0;
+  }
+
+  .calculator-wrapper {
+    height: 100vh;
+    border-radius: 0;
+    max-height: 100vh;
+    border: none;
+  }
+  
+  .calculator-card {
+    padding: 16px;
+    padding-bottom: env(safe-area-inset-bottom, 20px);
+  }
+
+  .calculator-screen {
+    min-height: 120px;
+    margin-bottom: 16px;
+    padding: 12px;
+  }
+
+  .result-text {
+    font-size: 2.4rem;
+  }
+
+  .calculator-keypad {
+    gap: 8px;
+  }
+
+  .key {
+    border-radius: 12px;
+    font-size: 1.1rem;
+    min-height: 44px;
+  }
+  
+  .key-sci {
+    font-size: 0.85rem;
+  }
+}
+
+/* Ultra-small devices */
+@media (max-width: 350px) {
+  .key {
+    font-size: 1rem;
+  }
+  .key-sci {
+    font-size: 0.8rem;
+  }
+  .result-text {
+    font-size: 2rem;
+  }
+}
