@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Photos Gallery | Premium Glassmorphic Image Gallery</title>
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Explore a beautiful, fully responsive, glassmorphic image gallery featuring search, instant category filtering, skeleton loading, and an immersive lightbox.">
+    <meta name="keywords" content="image gallery, glassmorphic UI, glassmorphism, response web design, photography portfolio">
+    <meta name="author" content="Antigravity AI">
+    
+    <!-- Open Graph Metadata -->
+    <meta property="og:title" content="Photos Gallery | Premium Glassmorphic Image Gallery">
+    <meta property="og:description" content="Immersive, highly responsive portfolio-style image gallery with fluid animations.">
+    <meta property="og:type" content="website">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    
+    <!-- Local Styles -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Background Decorative Orbs for Glassmorphism depth -->
+    <div class="bg-orbs">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="app-container">
+        
+        <!-- Header Section -->
+        <header class="main-header glass-panel">
+            <div class="logo-area">
+                <div class="logo-icon">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i>
+                </div>
+                <h1>Photos Gallery</h1>
+            </div>
+            
+            <!-- Dynamic Controls -->
+            <div class="controls-area">
+                <!-- Search Box -->
+                <div class="search-box glass-panel">
+                    <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                    <input type="text" id="search-input" placeholder="Search gallery by keyword..." autocomplete="off">
+                    <button id="clear-search" class="clear-btn" aria-label="Clear Search">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+                
+                <!-- Dark/Light Theme Toggle -->
+                <button id="theme-toggle" class="theme-toggle-btn glass-panel" aria-label="Toggle light/dark mode">
+                    <span class="toggle-icon sun-icon"><i class="fa-solid fa-sun"></i></span>
+                    <span class="toggle-icon moon-icon"><i class="fa-solid fa-moon"></i></span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Category Filters -->
+        <nav class="filter-navigation">
+            <div class="filter-container glass-panel">
+                <button class="filter-btn active" data-category="all">
+                    <i class="fa-solid fa-images"></i> All
+                </button>
+                <button class="filter-btn" data-category="nature">
+                    <i class="fa-solid fa-leaf"></i> Nature
+                </button>
+                <button class="filter-btn" data-category="animals">
+                    <i class="fa-solid fa-paw"></i> Animals
+                </button>
+                <button class="filter-btn" data-category="technology">
+                    <i class="fa-solid fa-microchip"></i> Tech
+                </button>
+                <button class="filter-btn" data-category="travel">
+                    <i class="fa-solid fa-plane-departure"></i> Travel
+                </button>
+                <button class="filter-btn" data-category="cars">
+                    <i class="fa-solid fa-car-side"></i> Cars
+                </button>
+            </div>
+        </nav>
+
+        <!-- Gallery Grid -->
+        <main class="gallery-wrapper">
+            <div id="gallery-grid" class="gallery-grid">
+                <!-- Javascript will dynamically inject image cards here.
+                     Skeletons will be displayed while loading. -->
+            </div>
+            
+            <!-- No Results State -->
+            <div id="no-results" class="no-results glass-panel hidden">
+                <i class="fa-solid fa-magnifying-glass-minus"></i>
+                <h3>No masterpieces found</h3>
+                <p>Try searching for different keywords or select a different category.</p>
+                <button id="reset-filters-btn" class="reset-btn">Reset Filters</button>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="main-footer glass-panel">
+            <p>&copy; 2026 Photos Gallery. All rights reserved. Crafted with pure CSS & JS.</p>
+        </footer>
+    </div>
+
+    <!-- Lightbox Modal -->
+    <div id="lightbox-modal" class="lightbox-modal hidden" role="dialog" aria-modal="true">
+        <!-- Close Button -->
+        <button id="lightbox-close" class="lightbox-btn close-btn" aria-label="Close Lightbox">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+
+        <!-- Left Arrow -->
+        <button id="lightbox-prev" class="lightbox-btn nav-btn prev-btn" aria-label="Previous Image">
+            <i class="fa-solid fa-chevron-left"></i>
+        </button>
+
+        <!-- Main Lightbox Display Area -->
+        <div class="lightbox-content">
+            <div class="lightbox-image-wrapper">
+                <!-- Skeleton loader in lightbox -->
+                <div class="lightbox-skeleton-loader shimmer"></div>
+                <img id="lightbox-img" src="" alt="" class="hidden">
+            </div>
+            
+            <!-- Glassmorphic Caption Bar -->
+            <div class="lightbox-caption glass-panel">
+                <div class="caption-meta">
+                    <span id="lightbox-category" class="category-badge">Category</span>
+                    <span id="lightbox-counter" class="image-counter">1 of 30</span>
+                </div>
+                <h2 id="lightbox-title">Image Title</h2>
+                <p id="lightbox-desc">Detailed description of the image content goes here.</p>
+            </div>
+        </div>
+
+        <!-- Right Arrow -->
+        <button id="lightbox-next" class="lightbox-btn nav-btn next-btn" aria-label="Next Image">
+            <i class="fa-solid fa-chevron-right"></i>
+        </button>
+    </div>
+
+    <!-- Script File -->
+    <script src="script.js"></script>
+</body>
+</html>
